@@ -1,0 +1,82 @@
+[
+{
+    "model": "negozio.prodotto",
+    "pk": 1,
+    "fields": {
+        "nome": "Cappicio da donna",
+        "prezzo": "100.00",
+        "descrizione": "la eleganza deve essere cotidiano per voi mes Dammes",
+        "immagine": "prodotti/S518873783f1946f286d35b0ab2f834e5n.jpg",
+        "categoria": "donna",
+        "quantita_disponibile": 3,
+        "immagine2": "prodotti/S2361fb003a4f42ecb66cdc648ebeae7cI.jpg",
+        "immagine3": "",
+        "colori": "Bianco, Rossa",
+        "data_creazione": "2026-07-19T06:50:54.126Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 2,
+    "fields": {
+        "nome": "Collana da donna",
+        "prezzo": "30.27",
+        "descrizione": "è molto leggero, e  antigraffio perfetto per qualsiasi evento",
+        "immagine": "prodotti/collana.png",
+        "categoria": "donna",
+        "quantita_disponibile": 11,
+        "immagine2": "prodotti/S03a37e83b6ee4cd7b7613ea42cb51ab5V.jpg",
+        "immagine3": "prodotti/S6b58bae3db5949a0834879914cec3a7fs.jpg",
+        "colori": "Bianca, Nera",
+        "data_creazione": "2026-07-21T03:13:13.962Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 3,
+    "fields": {
+        "nome": "Tacco da donna",
+        "prezzo": "70.00",
+        "descrizione": "fatta in pelle ,sotto è antiscivolo",
+        "immagine": "prodotti/S2e2ca5b8a2a6499281039492e33d3dddn.jpg",
+        "categoria": "donna",
+        "quantita_disponibile": 9,
+        "immagine2": "prodotti/Sf626b74d9aa9480bb511bc5ddd7a8bd7W.jpg",
+        "immagine3": "",
+        "colori": "Bianco, Nero,",
+        "data_creazione": "2026-07-21T03:17:22.062Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 4,
+    "fields": {
+        "nome": "maglietta sarpa",
+        "prezzo": "15.00",
+        "descrizione": "è bella per l'estate transparente",
+        "immagine": "prodotti/S529d99f9c92e43e6a7c495f1de133177H.jpg",
+        "categoria": "donna",
+        "quantita_disponibile": 10,
+        "immagine2": "prodotti/S3ad0593fd6014d2f98632e510c302a7an.jpg",
+        "immagine3": "",
+        "colori": "Bianco, Nero,",
+        "data_creazione": "2026-07-21T03:20:58.964Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 5,
+    "fields": {
+        "nome": "Stivale da donna",
+        "prezzo": "85.00",
+        "descrizione": "perfetto per inverno",
+        "immagine": "prodotti/S65a42faf5e6e453c8e44a33405b72ade5.jpg",
+        "categoria": "donna",
+        "quantita_disponibile": 9,
+        "immagine2": "prodotti/Sd037b45e7b8c46e3828ec601363afa7b8.jpg",
+        "immagine3": "",
+        "colori": "Nero , viola",
+        "data_creazione": "2026-07-21T03:28:23.306Z"
+    }
+}
+]
