@@ -1,0 +1,41 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5 pt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Card del Successo -->
+            <div class="bg-white p-5 rounded shadow-sm border">
+                <!-- Icona Spunta Animata o Grande -->
+                <div class="mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="currentColor"
+                        class="text-success bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg>
+                </div>
+
+                <!-- Messaggi -->
+                <h1 class="fw-bold text-dark mb-3">Pagamento Completato!</h1>
+                <p class="fs-5 text-muted mb-4">Grazie per il tuo acquisto su MackShop. Il tuo ordine è stato ricevuto
+                    con successo ed è in fase di elaborazione.</p>
+
+                <div class="bg-light p-3 rounded mb-4 border-start border-success border-3 text-start">
+                    <span class="small fw-bold text-uppercase text-muted d-block mb-1">Stato Ordine</span>
+                    <span class="fw-bold text-success">Confermato / Pagato</span>
+                </div>
+
+                <p class="small text-muted mb-5">Riceverai a breve un'e-mail di conferma con tutti i dettagli della
+                    spedizione e il codice di tracciamento.</p>
+
+                <!-- Pulsanti di Azione -->
+                <div class="d-grid gap-2">
+                    <a href="{% url 'home' %}" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                        Continua lo Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

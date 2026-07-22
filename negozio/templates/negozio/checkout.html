@@ -1,0 +1,98 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Completa il tuo Ordine</h2>
+
+    <div class="row">
+        <div class="col-md-6 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Il tuo carrello</span>
+                <span class="badge badge-secondary badge-pill">{{ cart|length }}</span>
+            </h4>
+            <ul class="list-group mb-3">
+                {% for item in cart %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">{{ item.prodotto.nome }}</h6>
+                        <small class="text-muted">Quantità: {{ item.quantita }}</small>
+                    </div>
+                    <span class="text-muted">€{{ item.prezzo }}</span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Totale (EUR)</span>
+                    <strong>€{{ cart.get_total_price }}</strong>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 order-md-1">
+            <h4 class="mb-3">Dati di Spedizione</h4>
+
+            {% if errore %}
+            <div class="alert alert-danger" role="alert">
+                {{ errore }}
+            </div>
+            {% endif %}
+
+            <form method="post" action="">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="id_nome">Nome</label>
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                        <div class="text-danger small">{{ form.nome.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="id_cognome">Cognome</label>
+                        {{ form.cognome }}
+                        {% if form.cognome.errors %}
+                        <div class="text-danger small">{{ form.cognome.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="text-danger small">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_indirizzo">Indirizzo</label>
+                    {{ form.indirizzo }}
+                    {% if form.indirizzo.errors %}
+                    <div class="text-danger small">{{ form.indirizzo.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label for="id_citta">Città</label>
+                        {{ form.citta }}
+                        {% if form.citta.errors %}
+                        <div class="text-danger small">{{ form.citta.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="id_cap">CAP</label>
+                        {{ form.cap }}
+                        {% if form.cap.errors %}
+                        <div class="text-danger small">{{ form.cap.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Procedi al pagamento con Stripe</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

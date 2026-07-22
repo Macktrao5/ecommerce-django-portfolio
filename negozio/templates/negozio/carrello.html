@@ -1,0 +1,64 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5 pt-4">
+    <div class="max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; shadow-sm">
+        <h1 class="fw-bold mb-4 text-dark border-bottom pb-2">Il tuo Carrello 🛒</h1>
+
+        {% if cart %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mt-2">
+                <thead class="table-light">
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Quantità</th>
+                        <th>Prezzo Unitario</th>
+                        <th>Prezzo Totale</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                    {% with prodotto=item.prodotto %}
+                    <tr>
+                        <td><strong class="text-dark">{{ prodotto.nome }}</strong></td>
+                        <td><span class="badge bg-secondary px-2.5 py-1.5">{{ item.quantita }}</span></td>
+                        <td>{{ item.prezzo }} €</td>
+                        <td class="fw-bold text-dark">{{ item.prezzo_totale }} €</td>
+                        <td>
+                            <a href="{% url 'cart_remove' prodotto.id %}"
+                                class="btn btn-sm btn-outline-danger py-1 px-2">
+                                Rimuovi ❌
+                            </a>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-end fs-4 fw-bold text-dark my-4 p-3 bg-light rounded border">
+            Totale Complessivo: <span class="text-success">{{ cart.get_total_price }} €</span>
+        </div>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mt-4">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary fw-bold px-4 py-2 order-2 order-md-1">
+                🛒 Continua lo Shopping
+            </a>
+            <!-- RIGA CORRETTA: Punta al nome pulito 'checkout' coordinato con urls.py -->
+            <a href="{% url 'checkout_stripe'%}" class="btn btn-success fw-bold px-4 py-2 shadow-sm order-1 order-md-2">
+                Procedi al Pagamento (Stripe) 💳
+            </a>
+        </div>
+
+        {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted fs-5 mb-4">Il tuo carrello è attualmente vuoto. Torna alla home per aggiungere
+                prodotti!</p>
+            <a href="{% url 'home' %}" class="btn btn-primary fw-bold px-4 py-2">Vai allo Shop</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

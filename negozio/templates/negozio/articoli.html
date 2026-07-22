@@ -1,0 +1,83 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 fw-bold text-center">Tutti i Nostri Articoli</h1>
+    <p class="text-muted text-center mb-5">Esplora il nostro catalogo completo e trova il prodotto perfetto per te.</p>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for prodotto in prodotti %}
+        <div class="col">
+            <!-- Aggiungiamo 'position-relative' sulla card, fondamentale per lo stretched-link -->
+            <div class="card h-100 shadow-sm border-0 target-card position-relative">
+
+                {% if prodotto.immagine %}
+                <img src="{{ prodotto.immagine.url }}" class="card-img-top" alt="{{ prodotto.nome }}"
+                    style="height: 250px; object-fit: contain; padding: 15px;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                    style="height: 250px; padding: 15px;">
+                    <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <!-- CORRETTO: Adesso il titolo contiene il nome del prodotto e l'URL esatto 'prodotto_dettaglio' -->
+                    <h5 class="card-title fw-bold mb-2">
+                        <a href="{% url 'prodotto_dettaglio' prodotto.id %}"
+                            class="stretched-link text-decoration-none text-dark">
+                            {{ prodotto.nome }}
+                        </a>
+                    </h5>
+
+                    <p class="card-text text-muted flex-grow-1 mb-2">{{ prodotto.descrizione|truncatewords:12 }}</p>
+
+                    <div class="mb-3">
+                        <span class="h5 text-success fw-bold">{{ prodotto.prezzo }} €</span>
+                    </div>
+
+                    <!-- SEZIONE PULSANTI -->
+                    <div class="d-grid gap-2 mt-auto">
+
+                        <!-- Pulsante 1 (SOPRA): "Vedi Dettaglio" visivo. -->
+                        <div class="btn btn-primary btn-sm fw-bold w-100">
+                            <i class="bi bi-eye-fill me-1"></i> Vedi Dettaglio
+                        </div>
+
+                        <!-- Pulsante 2 (SOTTO): "Aggiungi al carrello". -->
+                        <form action="{% url 'cart_add' prodotto.id %}" method="post" class="m-0 position-relative"
+                            style="z-index: 2;">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="override" value="False">
+                            <button type="submit" class="btn btn-outline-dark btn-sm w-100 fw-bold">
+                                <i class="bi bi-cart-plus-fill me-1"></i> Aggiungi al Carrello
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">Nessun articolo disponibile al momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Stile CSS per l'effetto del mouse -->
+<style>
+    .target-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .target-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5 pt-4">
+    <h2 class="fw-bold mb-4">📦 I miei ordini</h2>
+
+    {% if ordini %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Ordine</th>
+                    <th>Data</th>
+                    <th>Totale</th>
+                    <th>Stato Spedizione</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ordine in ordini %}
+                <tr>
+                    <td><strong>#{{ ordine.id }}</strong></td>
+                    <td>{{ ordine.data_creazione|date:"d/m/Y H:i" }}</td>
+                    <td><strong>€ {{ ordine.totale }}</strong></td>
+                    <td>
+                        {% if 'attesa' in ordine.stato|lower %}
+                        <span class="badge bg-secondary p-2">{{ ordine.get_stato_display }}</span>
+
+                        {% elif 'pagato' in ordine.stato|lower %}
+                        <!-- Giallo per Pagato -->
+                        <span class="badge bg-warning text-dark p-2">{{ ordine.get_stato_display }}</span>
+
+                        {% elif 'spedito' in ordine.stato|lower %}
+                        <!-- Azzurro per Spedito -->
+                        <span class="badge bg-info text-dark p-2">{{ ordine.get_stato_display }}</span>
+
+                        {% elif 'consegnato' in ordine.stato|lower %}
+                        <!-- Verde brillante per Consegnato -->
+                        <span class="badge bg-success p-2">{{ ordine.get_stato_display }}</span>
+
+                        {% else %}
+                        <span class="badge bg-primary p-2">{{ ordine.get_stato_display }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Non hai ancora effettuato nessun ordine. <a href="{% url 'home' %}" class="alert-link">Inizia lo shopping!</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

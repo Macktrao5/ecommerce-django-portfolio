@@ -1,0 +1,15 @@
+# Ambienti virtuali
+venv/
+env/
+ENV/
+
+# File di Python e Django
+__pycache__/
+*.py[cod]
+db.sqlite3
+
+# File multimediali e upload utente
+media/
+
+# File di configurazione locale / Chiavi segrete
+.env

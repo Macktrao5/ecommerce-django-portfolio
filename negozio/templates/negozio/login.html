@@ -1,0 +1,19 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 p-4">
+                <h2 class="fw-bold mb-4 text-center">🔐 Accedi al tuo Account</h2>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100 fw-bold mt-2">Accedi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

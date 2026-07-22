@@ -1,0 +1,40 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center mb-5">
+            <h1 class="fw-bold">Contattaci</h1>
+            <p class="text-muted">Hai domande sui prodotti o sul tuo ordine? Il nostro team di supporto è a tua completa
+                disposizione.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Box Email Supporto -->
+        <div class="col-md-5">
+            <div class="card h-100 text-center p-4 border-0 shadow-sm bg-light">
+                <div class="card-body">
+                    <i class="bi bi-envelope-fill display-5 text-primary mb-3"></i>
+                    <h5 class="fw-bold mb-2">Email di Supporto</h5>
+                    <p class="text-muted">Scrivici in qualsiasi momento, rispondiamo entro 24 ore.</p>
+                    <a href="mailto:supporto@tuonegozio.com"
+                        class="fw-bold text-decoration-none">supporto@tuonegozio.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box Spedizioni / Info -->
+        <div class="col-md-5">
+            <div class="card h-100 text-center p-4 border-0 shadow-sm bg-light">
+                <div class="card-body">
+                    <i class="bi bi-shield-check display-5 text-success mb-3"></i>
+                    <h5 class="fw-bold mb-2">Acquisti Sicuri</h5>
+                    <p class="text-muted">Tutti gli ordini sono protetti e tracciati dall'inizio alla consegna.</p>
+                    <span class="badge bg-success p-2">Supporto attivo Lun-Ven</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
