@@ -78,5 +78,69 @@
         "colori": "Nero , viola",
         "data_creazione": "2026-07-21T03:28:23.306Z"
     }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 6,
+    "fields": {
+        "nome": "T-shirt da uomo",
+        "prezzo": "30.50",
+        "descrizione": "100% Cottone è molto transpirante",
+        "immagine": "prodotti/Sdefb5692e13e485bae7f0312077648784.jpeg",
+        "categoria": "uomini",
+        "quantita_disponibile": 10,
+        "immagine2": "prodotti/Sa59126d4c56f49f7b9801b64d798d4c7k.jpeg",
+        "immagine3": "prodotti/Sa23d015b2cde45868e0b4ca04ed6ce58t.jpeg",
+        "colori": "Bianco, Nero, Blu",
+        "data_creazione": "2026-07-24T03:55:39.131Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 7,
+    "fields": {
+        "nome": "Giacca da uomo",
+        "prezzo": "50.00",
+        "descrizione": "**Giacca Casual in Suede Effetto Vintage — Uomo**\r\n\r\nUna giacca dal carattere deciso, perfetta per chi cerca uno stile urbano senza tempo. Realizzata in morbido tessuto effetto scamosciato color cammello, unisce un taglio moderno e leggermente oversize a dettagli che richiamano l'estetica retrò: colletto ampio, zip centrale a contrasto e polsini regolabili con bottone.\r\n\r\nIl tessuto avvolgente e la vestibilità comoda la rendono ideale sia per il giorno che per la sera, abbinata a un maglione dolcevita e jeans per un look casual-chic sempre azzeccato.\r\n\r\n**Caratteristiche:**\r\n- Tessuto effetto suede, morbido e resistente\r\n- Chiusura con zip frontale\r\n- Colletto ampio stile anni '70\r\n- Polsini regolabili con bottone\r\n- Vestibilità comoda, leggermente oversize\r\n- Colore: cammello/marrone\r\n\r\n*",
+        "immagine": "prodotti/S413efbdc9ce840bb9eb3ac10aba9efeac.jpg",
+        "categoria": "uomini",
+        "quantita_disponibile": 8,
+        "immagine2": "prodotti/S80868a5e4936463f928190464317ccbe6.jpg",
+        "immagine3": "",
+        "colori": "Marrone, Nero",
+        "data_creazione": "2026-07-24T03:57:11.355Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 8,
+    "fields": {
+        "nome": "sneakers da uomo",
+        "prezzo": "80.01",
+        "descrizione": "**Sneaker Basse in Pelle Nera con Dettagli Turchesi**\r\n\r\nUno stile iconico reinterpretato con un tocco di colore audace. Queste sneaker basse in pelle nera scamosciata abbinano una silhouette classica e senza tempo a dettagli in vivace turchese: il logo laterale, i lacci e gli occhielli metallici creano un contrasto deciso che rende ogni look immediatamente riconoscibile.\r\n\r\nLa suola spessa e strutturata garantisce comfort per tutto il giorno, mentre la tomaia in materiale morbido si adatta perfettamente al piede. Perfette da abbinare a un outfit casual con jeans, o per aggiungere un tocco di personalità a qualsiasi look sportivo.\r\n\r\n**Caratteristiche:**\r\n- Tomaia in pelle scamosciata nera\r\n- Dettagli a contrasto in turchese (logo, lacci, occhielli)\r\n- Suola alta e resistente, ideale per un comfort quotidiano\r\n- Design basso, stile street/casual\r\n- Chiusura con lacci classica\r\n\r\n**Consigli di abbinamento:** perfette con calzini a contrasto ben visibili (come nell'immagine) per completare il look in stile streetwear.",
+        "immagine": "prodotti/Sb96b86d0c0514464a8c6e3b9b79ed30aa.jpg",
+        "categoria": "uomini",
+        "quantita_disponibile": 10,
+        "immagine2": "prodotti/S8f39fcc1030a46719bf1ceeb038fd16dZ.jpg",
+        "immagine3": "prodotti/S587ac221a0be48d0b4eeb581e76f18aaL.jpg",
+        "colori": "Nero",
+        "data_creazione": "2026-07-24T03:59:01.429Z"
+    }
+},
+{
+    "model": "negozio.prodotto",
+    "pk": 9,
+    "fields": {
+        "nome": "sneakers da donna",
+        "prezzo": "90.00",
+        "descrizione": "**Sneaker Basse Bicolore Effetto Pastello con Design Artistico**\r\n\r\nUn modello dal design vivace e originale, pensato per chi ama distinguersi. La tomaia in pelle bianca è impreziosita da sfumature pastello rosa e celeste che sfumano dolcemente verso la punta, arricchite da schizzi di vernice bianca e dorata che donano un effetto \"hand-painted\" unico su ogni paio.\r\n\r\nI lacci e la suola in rosa confetto completano il look, mentre la struttura bassa e la suola bianca a contrasto assicurano comfort e uno stile street sempre attuale.\r\n\r\n**Caratteristiche:**\r\n- Tomaia in pelle bianca con sfumature pastello\r\n- Dettagli \"splatter\" effetto dipinto a mano\r\n- Suola e lacci in rosa a contrasto\r\n- Design basso, comfort quotidiano\r\n- Colorazione unica, stile streetwear/collezionabile\r\n\r\n**Consigli di abbinamento:** perfette per outfit primaverili chiari, jeans o abiti casual dai toni pastello.\r\n\r\n---",
+        "immagine": "prodotti/Sb24b73c85e3f4d56bf50373d2a0b0206b.jpg",
+        "categoria": "donna",
+        "quantita_disponibile": 10,
+        "immagine2": "prodotti/Sec0613afb8ad4616bcbe92b7c9d0eac0S.jpg",
+        "immagine3": "prodotti/Sff8d2bcae11c4536bbb04a377effdc95g.jpg",
+        "colori": "unica colore",
+        "data_creazione": "2026-07-24T04:01:04.949Z"
+    }
 }
 ]
