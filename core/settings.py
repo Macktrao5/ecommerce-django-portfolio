@@ -154,6 +154,12 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Impostazioni di sicurezza per i cookie in produzione (necessarie per mobile e HTTPS)
+
+
+
+# Configurazioni di sicurezza e proxy per Render e dispositivi mobili
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax'
