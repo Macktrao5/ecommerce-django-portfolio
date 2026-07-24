@@ -46,12 +46,13 @@ class Prodotto(models.Model):
 
 class Ordine(models.Model):
     STATO_ORDINE = [
+        ('PAGATO', 'Pagato'),
         ('in_elaborazione', 'In Elaborazione ⏳'),
         ('spedito', 'Spedito 📦'),
         ('consegnato', 'Consegnato ✅'),
     ]
     
-    stato = models.CharField(max_length=30, choices=STATO_ORDINE, default='in_elaborazione')
+    stato = models.CharField(max_length=20, choices=STATO_ORDINE, default='IN_ATTESA')
     # NUOVO CAMPO: Collega l'ordine a un utente registrato (può essere vuoto se l'utente compra come ospite)
     utente = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='ordini')
     # Dati completi del cliente e della spedizione

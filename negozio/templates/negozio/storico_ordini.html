@@ -26,7 +26,7 @@
                         <span class="badge bg-secondary p-2">{{ ordine.get_stato_display }}</span>
 
                         {% elif 'pagato' in ordine.stato|lower %}
-                        <!-- Giallo per Pagato -->
+                        <!-- Giallo o scuro per Pagato -->
                         <span class="badge bg-warning text-dark p-2">{{ ordine.get_stato_display }}</span>
 
                         {% elif 'spedito' in ordine.stato|lower %}

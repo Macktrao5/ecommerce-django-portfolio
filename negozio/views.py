@@ -144,7 +144,7 @@ def checkout(request):
                     'quantity': item['quantita'],
                 })
                 
-            success_url = request.build_absolute_uri(reverse('payment_success')) + f"?session_id={{CHECKOUT_SESSION_ID}}&ordine_id={ordine.id}"
+            success_url = request.build_absolute_uri(reverse('payment_success')) + f"?ordine_id={ordine.id}"
             cancel_url = request.build_absolute_uri(reverse('home'))
             
             try:
@@ -175,12 +175,31 @@ def checkout(request):
     return render(request, 'negozio/checkout.html', {'form': form, 'cart': cart})
 # 8. Vista per la pagina di successo (dopo il pagamento)
 def payment_success(request):
-    ordine_id = request.GET.get('ordine_id')
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    session_id = request.GET.get('session_id')
     ordine = None
-    if ordine_id:
-        ordine = get_object_or_404(Ordine, id=ordine_id)
-    return render(request, 'negozio/successo.html', {'ordine': ordine})
+    
+    # 1. Metodo principale: recupera l'ordine dai metadati sicuri di Stripe usando il session_id
+    if session_id:
+        try:
+            session = stripe.checkout.Session.retrieve(session_id)
+            ordine_id = session.metadata.get('ordine_id')
+            if ordine_id:
+                ordine = get_object_or_404(Ordine, id=ordine_id)
+                ordine.stato = 'PAGATO'
+                ordine.save()
+        except Exception as e:
+            print(f"Errore Stripe: {e}")
 
+    # 2. Metodo di riserva (fallback): se per caso leggeva già l'ID dall'URL
+    if not ordine:
+        ordine_id = request.GET.get('ordine_id')
+        if ordine_id:
+            ordine = get_object_or_404(Ordine, id=ordine_id)
+            ordine.stato = 'PAGATO'
+            ordine.save()
+            
+    return render(request, 'negozio/successo.html', {'ordine': ordine})
     # Vista per la pagina con tutti i prodotti (Articoli)
 def articoli(request):
     prodotti = Prodotto.objects.all()
