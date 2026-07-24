@@ -90,11 +90,11 @@ def cart_remove(request, prodotto_id):
 # 7. Vista Checkout (Pagina con il Form per i dati reali e reindirizzamento Stripe)
 # 7. Vista Checkout CORRETTA (Aggiunge il prodotto al volo e reindirizza a Stripe)
 # 7. Vista Checkout CORRETTA (Calcola il totale prima del salvataggio)
+# 7. Vista Checkout CORRETTA (Calcola sempre il totale e gestisce ospiti e utenti loggati)
 def checkout(request):
     cart = Cart(request)
 
-    # NUOVO CONTROLLO: Se il carrello è completamente vuoto, 
-    # blocchiamo il checkout e rimandiamo l'utente a vedere il carrello
+    # Se il carrello è completamente vuoto, blocchiamo il checkout
     if len(cart) == 0:
         return redirect('cart_detail')
 
@@ -104,21 +104,21 @@ def checkout(request):
             ordine = form.save(commit=False)
             ordine.stato = 'IN_ATTESA'
             
+            # Se l'utente è loggato, colleghiamo l'account all'ordine
             if request.user.is_authenticated:
                 ordine.utente = request.user
-                totale_ordine = sum(item['prodotto'].prezzo * item['quantita'] for item in cart)
+            
+            # CALCOLO DEL TOTALE: Adesso è fuori dal blocco, così funziona per tutti!
+            totale_ordine = sum(item['prodotto'].prezzo * item['quantita'] for item in cart)
             ordine.totale = totale_ordine  
-            # Assegniamo il totale al modello così il database è felice!
             
             ordine.save()
             
-            # Colleghiamo i prodotti reali del carrello a questo ordine
-            # Salvataggio voci ordine e aggiornamento magazzino
+            # Colleghiamo i prodotti reali del carrello a questo ordine e aggiorniamo il magazzino
             for item in cart:
                 prodotto = item['prodotto']
                 quantita_acquistata = item['quantita']
                 
-                # 1. Creiamo la voce dell'ordine
                 VoceOrdine.objects.create(
                     ordine=ordine,
                     prodotto=prodotto,
@@ -126,9 +126,10 @@ def checkout(request):
                     prezzo=prodotto.prezzo
                 )
                 
-                # 🔥 2. NOVITÀ: Sottraiamo i pezzi dal magazzino e salviamo!
+                # Sottraiamo i pezzi dal magazzino
                 prodotto.quantita_disponibile -= quantita_acquistata
                 prodotto.save()
+                
             # Prepariamo la lista articoli per Stripe
             line_items = []
             for item in cart:
@@ -138,7 +139,7 @@ def checkout(request):
                         'product_data': {
                             'name': item['prodotto'].nome,
                         },
-                        'unit_amount': int(item['prodotto'].prezzo * 100), # Corretto: prende il prezzo dal modello
+                        'unit_amount': int(item['prodotto'].prezzo * 100),
                     },
                     'quantity': item['quantita'],
                 })
@@ -163,7 +164,7 @@ def checkout(request):
                 # Svuotiamo il carrello dopo aver creato la sessione con successo
                 cart.clear()
                 
-                # Reindirizzamento REALE alla schermata di pagamento di Stripe
+                # Reindirizzamento alla schermata di pagamento di Stripe
                 return redirect(checkout_session.url, code=303)
                 
             except Exception as e:
@@ -172,7 +173,6 @@ def checkout(request):
         form = OrdineForm()
         
     return render(request, 'negozio/checkout.html', {'form': form, 'cart': cart})
-
 # 8. Vista per la pagina di successo (dopo il pagamento)
 def payment_success(request):
     ordine_id = request.GET.get('ordine_id')
