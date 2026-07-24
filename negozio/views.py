@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Ordine
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-
+from django.urls import reverse
 
 # Configura la chiave segreta di Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -323,3 +323,6 @@ def stripe_webhook(request):
 
     # Rispondiamo a Stripe con un 200 OK per dirgli "Messaggio ricevuto!"
     return HttpResponse(status=200)
+
+
+
