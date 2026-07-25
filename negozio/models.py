@@ -2,6 +2,7 @@ from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Prodotto(models.Model):
 
@@ -139,6 +140,36 @@ class NewsletterIscritto(models.Model):
 
     def __str__(self):
         return self.email
+
+
+#class Carrello(models.Model):
+class CarrelloItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True) # Per utenti non loggati
+    prodotto = models.ForeignKey(Prodotto, on_delete=models.CASCADE)
+    quantita = models.PositiveIntegerField(default=1)
+    data_aggiunta = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantita}x {self.prodotto.nome} ({self.user or 'Ospite'})"
+
+    @property
+    def totale_articolo(self):
+        return self.prodotto.prezzo * self.quantita    
+
+
+class Coupon(models.Model):
+    codice = models.CharField(max_length=50, unique=True)
+    valido_da = models.DateTimeField()
+    valido_a = models.DateTimeField()
+    sconto = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="Percentuale di sconto (da 0 a 100)"
+    )
+    attivo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.codice  
     
 
 

@@ -128,6 +128,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# In cima o nella sezione dedicata alle email in settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@tuonegozio.it'
 
 # Email di prova sul Terminale
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

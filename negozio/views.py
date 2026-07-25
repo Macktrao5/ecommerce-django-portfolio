@@ -19,6 +19,13 @@ from .models import Ordine
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
+from django.core.mail import send_mail
+from .models import Prodotto, CarrelloItem
+from django.utils import timezone
+from .models import Coupon
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Sum
+from .models import Ordine, Prodotto
 
 # Configura la chiave segreta di Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -179,7 +186,7 @@ def payment_success(request):
     session_id = request.GET.get('session_id')
     ordine = None
     
-    # 1. Metodo principale: recupera l'ordine dai metadati sicuri di Stripe usando il session_id
+    # 1. Recupero ordine tramite Stripe session_id
     if session_id:
         try:
             session = stripe.checkout.Session.retrieve(session_id)
@@ -191,13 +198,36 @@ def payment_success(request):
         except Exception as e:
             print(f"Errore Stripe: {e}")
 
-    # 2. Metodo di riserva (fallback): se per caso leggeva già l'ID dall'URL
+    # 2. Fallback tramite parametro GET nell'URL
     if not ordine:
         ordine_id = request.GET.get('ordine_id')
         if ordine_id:
             ordine = get_object_or_404(Ordine, id=ordine_id)
             ordine.stato = 'PAGATO'
             ordine.save()
+
+    # 3. Invio dell'email di conferma al cliente
+    if ordine and ordine.email:
+        subject = f'Conferma Ordine #{ordine.id} - Pagamento Ricevuto'
+        message = (
+            f"Ciao {ordine.nome},\n\n"
+            f"Grazie mille per il tuo acquisto!\n"
+            f"Il pagamento per l'ordine #{ordine.id} è andato a buon fine.\n\n"
+            f"Totale pagato: €{ordine.totale}\n"
+            f"Indirizzo di spedizione: {ordine.indirizzo}, {ordine.citta} ({ordine.cap})\n\n"
+            f"Ti avviseremo non appena il pacco sarà spedito.\n\n"
+            f"A presto!"
+        )
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [ordine.email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Errore nell'invio dell'email: {e}")
             
     return render(request, 'negozio/successo.html', {'ordine': ordine})
     # Vista per la pagina con tutti i prodotti (Articoli)
@@ -285,11 +315,12 @@ def iscrivi_newsletter(request):
     return redirect(request.META.get('HTTP_REFERER', 'home'))
     
  # Vista per visualizzare lo storico degli ordini dell'utente loggato
-# Vista per visualizzare lo storico degli ordini dell'utente loggato
+@login_required
 def storico_ordini(request):
-    # Prende solo gli ordini associati all'utente attualmente loggato
-    ordini = Ordine.objects.filter(utente=request.user).order_by('-data_creazione')
+    # Ordinamento crescente: dal più vecchio in alto al più recente in basso
+    ordini = Ordine.objects.filter(utente=request.user).order_by('id')
     return render(request, 'negozio/storico_ordini.html', {'ordini': ordini})
+
 
 def custom_logout(request):
     logout(request)
@@ -343,5 +374,55 @@ def stripe_webhook(request):
     # Rispondiamo a Stripe con un 200 OK per dirgli "Messaggio ricevuto!"
     return HttpResponse(status=200)
 
+# Vista per applicare un coupon al carrello
 
+def applica_coupon(request):
+    if request.method == 'POST':
+        codice = request.POST.get('codice_coupon')
+        now = timezone.now()
+        try:
+            coupon = Coupon.objects.get(codice__iexact=codice, valido_da__lte=now, valido_a__gte=now, attivo=True)
+            request.session['coupon_id'] = coupon.id
+        except Coupon.DoesNotExist:
+            request.session['coupon_id'] = None
+    return redirect('visualizza_carrello')
 
+#staff dashboard view
+@staff_member_required
+def admin_dashboard(request):
+    # Calcoliamo le metriche principali
+    totale_ordini = Ordine.objects.count()
+    
+    # Somma il totale degli ordini pagati (o di tutti gli ordini, a seconda delle tue preferenze)
+    fatturato_totale = Ordine.objects.filter(stato='PAGATO').aggregate(totale_somma=Sum('totale'))['totale_somma'] or 0
+    
+    totale_prodotti = Prodotto.objects.count()
+    
+    # Recuperiamo gli ultimi 5 ordini effettuati
+    ultimi_ordini = Ordine.objects.order_by('-id')[:5]
+    
+    context = {
+        'totale_ordini': totale_ordini,
+        'fatturato_totale': fatturato_totale,
+        'totale_prodotti': totale_prodotti,
+        'ultimi_ordini': ultimi_ordini,
+    }
+    return render(request, 'negozio/admin_dashboard.html', context)
+
+# Vista per eliminare un ordine dallo storico personale dell'utente
+@login_required
+def elimina_ordini_selezionati(request):
+    if request.method == 'POST':
+        # Prende tutti gli ID degli ordini spuntati dall'utente
+        ids_selezionati = request.POST.getlist('ordini_selezionati')
+        
+        if ids_selezionati:
+            # Filtra solo gli ordini che appartengono effettivamente all'utente loggato per sicurezza
+            ordini = Ordine.objects.filter(id__in=ids_selezionati, utente=request.user)
+            conteggio = ordini.count()
+            ordini.delete()
+            messages.success(request, f"Eliminati con successo {conteggio} ordini dal tuo storico.")
+        else:
+            messages.warning(request, "Non hai selezionato nessun ordine da eliminare.")
+            
+    return redirect('storico_ordini') # Assicurati che corrisponda al nome della tua rotta nel urls.py

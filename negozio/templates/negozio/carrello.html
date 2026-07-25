@@ -59,6 +59,16 @@
             <a href="{% url 'home' %}" class="btn btn-primary fw-bold px-4 py-2">Vai allo Shop</a>
         </div>
         {% endif %}
+
+        <form action="{% url 'applica_coupon' %}" method="POST" class="input-group mt-4 mb-3">
+            {% csrf_token %}
+            <input type="text" name="codice_coupon" class="form-control" placeholder="Inserisci codice coupon">
+            <button class="btn btn-outline-secondary" type="submit">Applica</button>
+        </form>
+
+        {% if request.session.coupon_id %}
+        <p class="text-success">Coupon applicato con successo!</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Prodotto, Ordine, VoceOrdine, Recensione
+from .models import Coupon
 
 # 1. Configurazione per i Prodotti
 @admin.register(Prodotto)
@@ -23,3 +24,4 @@ class ProdottoAdmin(admin.ModelAdmin):
 admin.site.register(Ordine)
 admin.site.register(VoceOrdine)
 admin.site.register(Recensione)
+admin.site.register(Coupon)

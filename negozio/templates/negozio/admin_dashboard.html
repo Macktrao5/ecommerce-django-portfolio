@@ -1,0 +1,62 @@
+{% extends 'negozio/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">📊 Dashboard Statistiche Amministratore</h2>
+
+    <!-- Schede Statistiche -->
+    <div class="row text-white mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary shadow p-3">
+                <h5>Fatturato Totale (Pagato)</h5>
+                <h3>€ {{ fatturato_totale|floatformat:2 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success shadow p-3">
+                <h5>Ordini Totali Ricevuti</h5>
+                <h3>{{ totale_ordini }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-dark text-white shadow p-3">
+                <h5>Prodotti in Catalogo</h5>
+                <h3>{{ totale_prodotti }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabella Ultimi Ordini -->
+    <h4 class="mb-3">Ultimi Ordini Ricevuti</h4>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID Ordine</th>
+                    <th>Cliente</th>
+                    <th>Totale</th>
+                    <th>Stato</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in ultimi_ordini %}
+                <tr>
+                    <td><strong>#{{ o.id }}</strong></td>
+                    <td>{{ o.nome }} ({{ o.email }})</td>
+                    <td>€ {{ o.totale }}</td>
+                    <td>
+                        <span class="badge bg-secondary">{{ o.get_stato_display }}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">Nessun ordine registrato al momento.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Torna al Negozio</a>
+    </div>
+</div>
+{% endblock %}

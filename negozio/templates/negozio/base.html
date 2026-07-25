@@ -62,6 +62,14 @@
                         {% endif %}
                     </li>
 
+                    <!-- Dashboard Admin (Solo per Staff) -->
+                    {% if request.user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                            <i class="bi bi-bar-chart-fill me-1 text-primary"></i>Dashboard Admin
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
 
                 <!-- Menu Utente (Area Personale, Ordini e Login) -->

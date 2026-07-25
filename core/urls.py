@@ -53,6 +53,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #stripe webhook endpoint
     path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
+    # URL PER L'APPLICAZIONE DEL COUPON AL CARRELLO
+    path('carrello/coupon/', views.applica_coupon, name='applica_coupon'),
+    # URL PER LA DASHBOARD DI ADMIN
+    path('dashboard-amministratore/', views.admin_dashboard, name='admin_dashboard'),
+    # URL PER L'ELIMINAZIONE DI UN ORDINE DALL'AREA PERSONALE
+    path('elimina-ordini-selezionati/', views.elimina_ordini_selezionati, name='elimina_ordini_selezionati'),
+    
 ]
 
 
