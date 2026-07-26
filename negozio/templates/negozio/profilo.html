@@ -1,0 +1,59 @@
+{% extends 'negozio/base.html' %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 600px;">
+    <h2 class="mb-4">Il mio Profilo e Indirizzo di Spedizione</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="card p-4 shadow-sm">
+        {% csrf_token %}
+
+        <h5 class="mb-3 text-muted">Dati Personali</h5>
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" name="first_name" value="{{ request.user.first_name }}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cognome</label>
+            <input type="text" name="last_name" value="{{ request.user.last_name }}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" value="{{ request.user.email }}" class="form-control">
+        </div>
+
+        <hr class="my-4">
+
+        <h5 class="mb-3 text-muted">Indirizzo di Spedizione Predefinito</h5>
+        <div class="mb-3">
+            <label class="form-label">Indirizzo</label>
+            <input type="text" name="indirizzo" value="{{ profilo.indirizzo|default:'' }}" class="form-control"
+                placeholder="Via Roma 10">
+        </div>
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label class="form-label">Città</label>
+                <input type="text" name="citta" value="{{ profilo.citta|default:'' }}" class="form-control"
+                    placeholder="Barletta">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">CAP</label>
+                <input type="text" name="cap" value="{{ profilo.cap|default:'' }}" class="form-control"
+                    placeholder="76121">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Telefono</label>
+            <input type="text" name="telefono" value="{{ profilo.telefono|default:'' }}" class="form-control"
+                placeholder="Il tuo numero di telefono">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Salva Modifiche</button>
+    </form>
+</div>
+{% endblock %}

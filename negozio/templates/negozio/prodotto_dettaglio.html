@@ -1,122 +1,117 @@
 {% extends 'negozio/base.html' %}
 
 {% block content %}
-<div class="container my-5 pt-4">
-    <div class="row g-4">
-        <!-- Immagine del Prodotto -->
-        <div class="col-md-6 text-center">
+<div class="container my-5">
+
+    <!-- SEZIONE PRINCIPALE: Immagine e Dettagli del Prodotto -->
+    <div class="row mb-5">
+        <!-- Colonna Immagine -->
+        <div class="col-md-6 mb-4 mb-md-0">
             {% if prodotto.immagine %}
-            <img src="{{ prodotto.immagine.url }}" class="img-fluid rounded shadow-sm" alt="{{ prodotto.nome }}"
-                style="max-height: 400px; object-fit: contain;">
+            <img src="{{ prodotto.immagine.url }}" alt="{{ prodotto.nome }}" class="img-fluid rounded shadow-sm w-100"
+                style="max-height: 400px; object-fit: cover;">
             {% else %}
-            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 300px;">
-                <span class="text-muted">Nessuna immagine disponibile</span>
-            </div>
+            <div class="bg-light text-center p-5 rounded text-muted">Nessuna immagine disponibile</div>
             {% endif %}
         </div>
 
-        <!-- Dettagli del Prodotto -->
+        <!-- Colonna Descrizione e Prezzo -->
         <div class="col-md-6">
-            <h1 class="fw-bold text-dark mb-2">{{ prodotto.nome }}</h1>
-            <div class="mb-3">
-                <span class="h3 text-success fw-bold">{{ prodotto.prezzo }} €</span>
-            </div>
+            <h1 class="mb-3">{{ prodotto.nome }}</h1>
+            <h3 class="text-primary mb-3">€ {{ prodotto.prezzo }}</h3>
+            <p class="text-muted mb-4">{{ prodotto.descrizione }}</p>
 
-            <!-- 🔥 BADGE DI URGENZA / DISPONIBILITÀ MAGAZZINO -->
-            <div class="mb-3">
-                {% if prodotto.quantita_disponibile > 0 and prodotto.quantita_disponibile <= 3 %} <div
-                    class="alert alert-danger py-2 m-0" role="alert">
-                    🔥 <strong>Attenzione!</strong> Rimangono solo <strong>{{ prodotto.quantita_disponibile }}</strong>
-                    pezzi disponibili. Affrettati!
+            <a href="#" class="btn btn-primary btn-lg w-100 mb-3">Aggiungi al Carrello</a>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- SEZIONE RECENSIONI E INSERIMENTO -->
+    <div class="row">
+        <div class="col-lg-8">
+            <h3 class="mb-4">Recensioni dei Clienti</h3>
+
+            <!-- Lista delle recensioni esistenti -->
+            {% if recensioni %}
+            {% for recensione in recensioni %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">{{ recensione.utente.username }}</h5>
+                    <p class="text-warning mb-1">⭐ Voto: {{ recensione.voto }}/5</p>
+                    <p class="card-text">{{ recensione.testo }}</p>
+
+                    <!-- MOSTRA L'IMMAGINE DELLA RECENSIONE SE ESISTE -->
+                    {% if recensione.immagine %}
+                    <div class="mt-3">
+                        <a href="{{ recensione.immagine.url }}" target="_blank">
+                            <img src="{{ recensione.immagine.url }}" alt="Foto recensione" class="img-thumbnail"
+                                style="max-width: 150px; border-radius: 8px;">
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <small class="text-muted d-block mt-2">{{ recensione.data|date:"d M Y" }}</small>
+                </div>
             </div>
-            {% elif prodotto.quantita_disponibile == 0 %}
-            <div class="alert alert-dark py-2 m-0" role="alert">
-                ❌ <strong>Prodotto esaurito</strong> momentaneamente.
-            </div>
+            {% endfor %}
             {% else %}
-            <div class="alert alert-success py-2 m-0" role="alert">
-                ✅ Disponibile in magazzino ({{ prodotto.quantita_disponibile }} pezzi)
-            </div>
+            <p class="text-muted">Ancora nessuna recensione per questo prodotto. Sii il primo a scriverne una!</p>
             {% endif %}
-        </div>
 
-        <hr>
-        <h5 class="fw-bold text-secondary">Descrizione:</h5>
-        <p class="text-muted fs-6 mb-4">{{ prodotto.descrizione }}</p>
-
-        <!-- FORM PER AGGIUNGERE AL CARRELLO -->
-        <form action="{% url 'cart_add' prodotto.id %}" method="post" class="mt-4">
-            {% csrf_token %}
-            <div class="d-flex align-items-center gap-3 mb-3" style="max-width: 250px;">
-                <label for="quantity" class="fw-bold text-muted m-0">Quantità:</label>
-                <input type="number" name="quantity" id="quantity" value="1" min="1"
-                    class="form-control text-center border-secondary shadow-sm">
-            </div>
-            <input type="hidden" name="override" value="False">
-
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                    🛒 Aggiungi al Carrello
-                </button>
-                <a href="{% url 'home' %}" class="btn btn-outline-secondary fw-bold">
-                    Torna allo Shop
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- SEZIONE RECENSIONI -->
-<hr class="my-5">
-<h4 class="mb-4">Recensioni</h4>
-{% for recensione in prodotto.recensioni.all %}
-<div class="card mb-2">
-    <div class="card-body">
-        <strong>{{ recensione.utente.username }}</strong> - {{ recensione.voto }} ⭐
-        <p class="mb-0">{{ recensione.commento }}</p>
-    </div>
-</div>
-{% empty %}
-<p class="text-muted">Non ci sono ancora recensioni per questo prodotto.</p>
-{% endfor %}
-
-{% if request.user.is_authenticated %}
-<h5 class="mt-4">Lascia una recensione</h5>
-<form method="post" action="{% url 'aggiungi_recensione' prodotto.id %}" class="bg-light p-3 rounded">
-    {% csrf_token %}
-    <select name="voto" class="form-control mb-2">
-        <option value="5">5 ⭐</option>
-        <option value="4">4 ⭐</option>
-        <option value="3">3 ⭐</option>
-        <option value="2">2 ⭐</option>
-        <option value="1">1 ⭐</option>
-    </select>
-    <textarea name="commento" class="form-control mb-2" placeholder="Scrivi il tuo commento..." required></textarea>
-    <button type="submit" class="btn btn-primary">Invia recensione</button>
-</form>
-{% else %}
-<p class="mt-4 text-muted"><em>Accedi per lasciare una recensione.</em></p>
-{% endif %}
-
-</div> <!-- Fine container -->
-
-<!-- Sezione Prodotti Correlati -->
-{% if prodotti_correlati %}
-<div class="row mt-5">
-    <hr>
-    <h3 class="mb-4">Potrebbero piacerti anche</h3>
-    {% for correlato in prodotti_correlati %}
-    <div class="col-md-4 mb-3">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">{{ correlato.nome }}</h5>
-                <p class="card-text text-muted">€ {{ correlato.prezzo }}</p>
-                <a href="{% url 'prodotto_dettaglio' correlato.id %}" class="btn btn-outline-primary btn-sm">Vedi
-                    prodotto</a>
+            <!-- Form per lasciare una recensione -->
+            <div class="card mt-5 shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-3">Lascia una recensione</h4>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Valutazione (da 1 a 5 stelle)</label>
+                            <select name="voto" class="form-select">
+                                <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                                <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                                <option value="3">⭐⭐⭐ (3/5)</option>
+                                <option value="2">⭐⭐ (2/5)</option>
+                                <option value="1">⭐ (1/5)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">La tua recensione</label>
+                            <textarea name="testo" class="form-control" rows="3"
+                                placeholder="Scrivi qui la tua opinione sul prodotto..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Aggiungi una foto (opzionale)</label>
+                            <input type="file" name="immagine" class="form-control" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-success">Pubblica Recensione</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    {% endfor %}
+
+    <!-- SEZIONE PRODOTTI CORRELATI -->
+    {% if prodotti_correlati %}
+    <div class="mt-5 pt-4">
+        <hr class="mb-4">
+        <h3 class="mb-4">Potrebbero piacerti anche</h3>
+        <div class="row">
+            {% for correlato in prodotti_correlati %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ correlato.nome }}</h5>
+                        <p class="card-text text-muted">€ {{ correlato.prezzo }}</p>
+                        <a href="{% url 'prodotto_dettaglio' correlato.id %}"
+                            class="btn btn-outline-primary btn-sm">Vedi prodotto</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
 </div>
-{% endif %}
 {% endblock %}

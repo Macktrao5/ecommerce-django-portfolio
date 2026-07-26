@@ -26,7 +26,7 @@ urlpatterns = [
     
     # 4. Processo di Checkout e Stripe
     path('checkout-stripe/', views.checkout, name='checkout_stripe'),
-    path('pagamento-successo/', views.payment_success, name='payment_success'),
+    path('pagamento-successo/', views.pagamento_successo, name='pagamento_successo'),
     path('webhook/', views.stripe_webhook, name='stripe_webhook'),
     # 5. Pagine statiche aggiuntive
     path('articoli/', views.articoli, name='articoli'),
@@ -59,7 +59,12 @@ urlpatterns = [
     path('dashboard-amministratore/', views.admin_dashboard, name='admin_dashboard'),
     # URL PER L'ELIMINAZIONE DI UN ORDINE DALL'AREA PERSONALE
     path('elimina-ordini-selezionati/', views.elimina_ordini_selezionati, name='elimina_ordini_selezionati'),
-    
+    path('crea-checkout-session/', views.checkout, name='crea_checkout_session'),
+    path('pagamento-successo/', views.pagamento_successo, name='pagamento_successo'),
+    path('pagamento-annullato/', views.pagamento_annullato, name='pagamento_annullato'),
+    #profile utente
+    path('profilo/', views.profilo_utente, name='profilo_utente'),
+    path('prodotto/<int:pk>/', views.prodotto_dettaglio, name='prodotto_dettaglio'),
 ]
 
 
@@ -67,3 +72,6 @@ urlpatterns = [
 # Controlliamo che l'impostazione MEDIA_URL sia effettivamente configurata
 if settings.DEBUG and settings.MEDIA_URL:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)    

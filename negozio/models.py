@@ -131,6 +131,8 @@ class Recensione(models.Model):
     commento = models.TextField()
     data = models.DateTimeField(auto_now_add=True)
 
+    immagine = models.ImageField(upload_to='recensioni/', blank=True, null=True)
+
     def __str__(self):
         return f"Recensione di {self.utente.username} su {self.prodotto.nome}"
     
@@ -169,7 +171,18 @@ class Coupon(models.Model):
     attivo = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.codice  
+        return self.codice 
+
+#profile utente
+class ProfiloUtente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profilo')
+    indirizzo = models.CharField(max_length=255, blank=True, null=True)
+    citta = models.CharField(max_length=100, blank=True, null=True)
+    cap = models.CharField(max_length=10, blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return f"Profilo di {self.user.username}"
     
 
 

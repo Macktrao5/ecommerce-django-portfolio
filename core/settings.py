@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+
+
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -140,10 +143,16 @@ DEFAULT_FROM_EMAIL = 'supporto@tuonegozio.com'
 STRIPE_PUBLIC_KEY = 'pk_test_51TtHBk4A76UUWo33slJHPDHj4It9wJUKwSXUnYa2UxuScLtg1VEOGR02gz9KaC3QqTV4zvy6kIsHXodX3qjvIo4600twQBEKNX'  # Incolla qui la chiave pubblica
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
+# Impostazioni Stripe (Modalità Test)
+# Impostazioni Stripe (Modalità Test)
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 # Cartella sul tuo computer dove verranno salvate le immagini caricate
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 # Impostazioni per il login e logout
 LOGIN_REDIRECT_URL = 'home'
@@ -171,6 +180,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
+
 
 
 
